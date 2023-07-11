@@ -40,10 +40,14 @@ with open(csvPath) as csvFile:
 # var to hold candidate info to be concatenated into result string
 resultBody = ""
 
+# loop over candidate list to index into totals list and produce string of results
 for i in range(0, len(candidates)):
     percent = str(round(100 * votes[i]/votesTotal, 3))
     candidateString = "\n" + candidates[i] + ": " + percent + "% " + '(' + str(votes[i]) + ')'
     resultBody += candidateString
+
+# determine winner
+winner = candidates[votes.index(max(votes))]
 
 # Results string for use in console print and writer
 resultHead = f"""Election Results
@@ -62,6 +66,6 @@ result = resultHead + resultBody + resultTail
 # Print results
 print(result)
 
-# # writer
-# with open(writePath, 'w') as writeFile:
-#     writeFile.write(result)
+# writer
+with open(writePath, 'w') as writeFile:
+    writeFile.write(result)
