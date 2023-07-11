@@ -41,9 +41,15 @@ with open(csvPath) as csvFile:
 resultBody = ""
 
 # loop over candidate list to index into totals list and produce string of results
-for i in range(0, len(candidates)):
-    percent = str(round(100 * votes[i]/votesTotal, 3))
-    candidateString = "\n" + candidates[i] + ": " + percent + "% " + '(' + str(votes[i]) + ')'
+# for i in range(0, len(candidates)):
+#     percent = str(round(100 * votes[i]/votesTotal, 3))
+#     candidateString = "\n" + candidates[i] + ": " + percent + "% " + '(' + str(votes[i]) + ')'
+#     resultBody += candidateString
+
+# alt lookup using enumerate()
+for index, candidate in enumerate(candidates):
+    percent = str(round(100 * votes[index]/votesTotal, 3))
+    candidateString = "\n" + candidates[index] + ": " + percent + "% " + '(' + str(votes[index]) + ')'
     resultBody += candidateString
 
 # determine winner
