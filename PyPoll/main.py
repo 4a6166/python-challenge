@@ -37,26 +37,27 @@ with open(csvPath) as csvFile:
             # add new vote index, counting this row as first vote
             votes.append(1)
 
-for i in range(0, len(candidates)):
-    print(
-        candidates[i] + ":",
-        str(round(100 * votes[i]/votesTotal, 3)) + "%",
-        '(' + str(votes[i]) + ')'
-        )
+# var to hold candidate info to be concatenated into result string
+resultBody = ""
 
+for i in range(0, len(candidates)):
+    percent = str(round(100 * votes[i]/votesTotal, 3))
+    candidateString = "\n" + candidates[i] + ": " + percent + "% " + '(' + str(votes[i]) + ')'
+    resultBody += candidateString
 
 # Results string for use in console print and writer
-result = f"""Election Results
+resultHead = f"""Election Results
 -------------------------
 Total Votes: {votesTotal}
--------------------------
-Charles Casper Stockham: 23.049% (85213)
-Diana DeGette:
-Raymon Anthony Doane:
+-------------------------"""
+
+resultTail = f"""
 -------------------------
 Winner: {winner}
 -------------------------
 """
+
+result = resultHead + resultBody + resultTail
 
 # Print results
 print(result)
