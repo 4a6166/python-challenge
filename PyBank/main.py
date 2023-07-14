@@ -9,8 +9,7 @@ totalMonths = 0
 netPL = 0
 
 plPrev = None
-changesPL = []
-changesDates = []
+changes = {}
 avgPL = 0
 increasePLGreatest = ['date', '0']
 decreasePLGreatest = ['date', '0']
@@ -37,23 +36,20 @@ with open(csvPath) as csvFile:
         # Add PL change to array
         if plPrev is not None:
             changePl = pl - plPrev
-            changesPL.append(changePl)
-            changesDates.append(date)
+            changes[date] = changePl
 
         # Track PL for next row's change calc
         plPrev = pl
 
 # Logic for average profit and loss calculation
-avgPL = round(sum(changesPL) / len(changesPL), 2)
+avgPL = round(sum(changes.values())/len(changes), 2)
 
 # Assigns date and amount to greatest increase and decrease variables
-increaseG = max(changesPL)
-increasePLGreatest[1] = str(increaseG)
-increasePLGreatest[0] = changesDates[changesPL.index(increaseG)]
+increasePLGreatest[1] = max(changes.values())
+increasePLGreatest[0] = max(changes, key=changes.get)
 
-decreaseG = min(changesPL)
-decreasePLGreatest[1] = str(decreaseG)
-decreasePLGreatest[0] = changesDates[changesPL.index(decreaseG)]
+decreasePLGreatest[1] = min(changes.values())
+decreasePLGreatest[0] = min(changes, key=changes.get)
 
 # Results string for use in console print and writer
 result = f"""Financial Analysis
