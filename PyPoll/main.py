@@ -5,11 +5,7 @@ import os
 import csv
 
 # declare empty vars
-votesTotal = 0
-candidates = []
-percetages = []
-votes = []
-winner = ""
+candidates = {}
 
 # file paths
 csvPath = os.path.join('PyPoll', 'Resources', 'election_data.csv')
@@ -20,50 +16,30 @@ with open(csvPath) as csvFile:
     csvReader = csv.reader(csvFile, delimiter=',')
 
     # Assign first row of CSV as header, pop it from rows list
-    csvHeader = next(csvReader)
+    csvHeader = next(csvReader)  # Ballot ID,County,Candidate
 
     for row in csvReader:
-        # iterate vote count
-        votesTotal += 1
-
-        if row[2] in candidates:
-            # get index that matches all lists
-            i = candidates.index(row[2])
-            # increment votes count
-            votes[i] += 1
-        else:
-            # add candidate to list
-            candidates.append(row[2])
-            # add new vote index, counting this row as first vote
-            votes.append(1)
+        try:
+            candidates[row[2]] += 1
+        except:
+            candidates[row[2]] = 1
 
 # var to hold candidate info to be concatenated into result string
+totCount = sum(candidates.values())
 resultBody = ""
-
-# loop over candidate list to index into totals list and produce string of results
-# for i in range(0, len(candidates)):
-#     percent = str(round(100 * votes[i]/votesTotal, 3))
-#     candidateString = "\n" + candidates[i] + ": " + percent + "% " + '(' + str(votes[i]) + ')'
-#     resultBody += candidateString
-
-# alt lookup using enumerate()
-for index, candidate in enumerate(candidates):
-    percent = str(round(100 * votes[index]/votesTotal, 3))
-    candidateString = "\n" + candidates[index] + ": " + percent + "% " + '(' + str(votes[index]) + ')'
-    resultBody += candidateString
-
-# determine winner
-winner = candidates[votes.index(max(votes))]
-
+for candidate in candidates:
+    percent = round(100 * candidates[candidate]/totCount, 3)
+    resultBody = resultBody + f'\n{candidate}: {percent}% ({candidates[candidate]})'
+ 
 # Results string for use in console print and writer
 resultHead = f"""Election Results
 -------------------------
-Total Votes: {votesTotal}
+Total Votes: {totCount}
 -------------------------"""
 
 resultTail = f"""
 -------------------------
-Winner: {winner}
+Winner: {max(candidates, key=candidates.get)}
 -------------------------
 """
 
